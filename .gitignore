@@ -1,4 +1,12 @@
-**.tfvars
-**.tfstate
-**.tfstate.*
-**/.terraform/
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+
+# OS
+.DS_Store
+
+# Go binaries
+server
+src_demo_backup/
