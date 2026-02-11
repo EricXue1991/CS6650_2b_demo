@@ -36,9 +36,13 @@ aws configure set aws_session_token <YOUR_SESSION_TOKEN>
 Option B (Environment variables):
 
 export AWS_ACCESS_KEY_ID="..."
+
 export AWS_SECRET_ACCESS_KEY="..."
+
 export AWS_SESSION_TOKEN="..."
+
 export AWS_DEFAULT_REGION="us-west-2"
+
 Verify:
 aws sts get-caller-identity
 
@@ -82,16 +86,18 @@ API Examples (showing required response codes)
 curl -i -X POST "http://$PUBLIC_IP:8080/products/200/details" \
  -H "Content-Type: application/json" \
  -d '{"sku":"X","manufacturer":"Y","category_id":1,"weight":1,"some_other_id":1}'
-
+![200 Create](<截屏2026-02-10 下午7.56.14.png>)
 200 OK (Get existing)
 curl -i "http://$PUBLIC_IP:8080/products/200"
+![200 Get](<截屏2026-02-10 下午8.54.11.png>)
 
 404 Not Found (Get missing)
 curl -i "http://$PUBLIC_IP:8080/products/999"
+![404 Not Found](<截屏2026-02-10 下午8.55.41.png>)
 
 400 Bad Request (Invalid productId)
 curl -i "http://$PUBLIC_IP:8080/products/0"
-
+![400 Bad Request](<截屏2026-02-10 下午8.56.26.png>)
 Clean Up
 cd terraform
 terraform destroy
