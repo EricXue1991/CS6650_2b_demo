@@ -46,13 +46,14 @@ export AWS_DEFAULT_REGION="us-west-2"
 Verify:
 aws sts get-caller-identity
 
-Deploy Infrastructure
+## Deploy Infrastructure
 
 cd terraform
 terraform init
 terraform apply
 
-Get Public IP (ECS Task)
+## Get Public IP (ECS Task)
+
 Run in terraform/ folder:
 
 aws ec2 describe-network-interfaces \
@@ -75,36 +76,41 @@ aws ecs list-tasks \
  --query 'NetworkInterfaces[0].Association.PublicIp' \
  --output text
 
-Set:
+## Set:
+
 export PUBLIC_IP="<the-output-ip>"
 
 Base URL:
 http://$PUBLIC_IP:8080
 
-API Examples (showing required response codes)
+## API Examples (showing required response codes)
+
 200 OK (Create)
 curl -i -X POST "http://$PUBLIC_IP:8080/products/200/details" \
  -H "Content-Type: application/json" \
  -d '{"sku":"X","manufacturer":"Y","category_id":1,"weight":1,"some_other_id":1}'
-![200 Create](<截屏2026-02-10 下午7.56.14.png>)
+![200 Create](images/create_200.png)
+
 200 OK (Get existing)
 curl -i "http://$PUBLIC_IP:8080/products/200"
-![200 Get](<截屏2026-02-10 下午8.54.11.png>)
+![200 Get](images/get_200.png)
 
 404 Not Found (Get missing)
 curl -i "http://$PUBLIC_IP:8080/products/999"
-![404 Not Found](<截屏2026-02-10 下午8.55.41.png>)
+![404 Not Found](images/get_404.png)
 
 400 Bad Request (Invalid productId)
 curl -i "http://$PUBLIC_IP:8080/products/0"
-![400 Bad Request](<截屏2026-02-10 下午8.56.26.png>)
-Clean Up
+![400 Invalid ID](images/get_400.png)
+
+## Clean Up
+
 cd terraform
 terraform destroy
 
 .gitignore Notes
 
-Do NOT commit:
+## Do NOT commit:
 
 terraform.tfstate\*
 
