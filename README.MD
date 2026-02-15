@@ -119,3 +119,41 @@ terraform.tfstate\*
 \*.tfvars
 
 secrets, keys, .env
+
+## Load Testing with Locust
+
+We used Locust to evaluate the performance and scalability of the Product API.
+
+### Test Setup
+
+- Environment: Local machine
+- Tool: Locust
+- Workload distribution:
+  - ~80% GET /products/{id}
+  - ~20% POST /products/{id}/details
+- Backend storage: in-memory hash map
+
+### Results (50 Users)
+
+- Throughput: ~870 requests/sec
+- Failure rate: 0%
+- p95 latency: < 5 ms
+
+![Locust 50 users](images/locust_50_users.png)
+
+### Stress Test (200 Users)
+
+- Throughput: ~3560 requests/sec
+- Failure rate: 0%
+- p95 latency:
+  - GET: ~2 ms
+  - POST: ~7 ms
+- The system remained stable under higher concurrency.
+
+![Locust 200 users](images/locust_200_users.png)
+
+### Discussion
+
+In a real-world e-commerce scenario, read operations (GET product) are far more common than write operations (POST product). Using an in-memory hash map allows O(1) access for reads, which significantly benefits read-heavy workloads.
+
+I observed little difference between HttpUser and FastHttpUser in Locust. This is likely because the performance bottleneck lies in the Go server and local CPU scheduling rather than the Python HTTP client. Since each request performs lightweight in-memory operations, client-side overhead has minimal impact on overall latency.

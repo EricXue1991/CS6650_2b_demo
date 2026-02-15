@@ -82,20 +82,20 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// minimal validation (你之后按 api.yaml 再加强)
+		
 		if body.SKU == "" || body.Manufacturer == "" || body.CategoryID <= 0 || body.Weight <= 0 {
 			writeErr(w, http.StatusBadRequest, "INVALID_INPUT", "The provided input data is invalid", "Missing or invalid required fields")
 			return
 		}
 
-		// 强制 product_id 和 path 一致（常见要求）
+		
 		body.ProductID = productID
 
 		mu.Lock()
 		products[productID] = body
 		mu.Unlock()
 
-		// 这里先用 200；如果 spec 写 201 再改
+		
 		writeJSON(w, http.StatusOK, body)
 		return
 	}
